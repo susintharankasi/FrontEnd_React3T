@@ -5,6 +5,7 @@ const Weather = () => {
   const [city, setCity] = useState('');
   const [weather, setWeather] = useState(null);
   const [error, setError] = useState('');
+  const weatherApiUrl = process.env.REACT_APP_WEATHER_API_URL; // Fetch from .env
 
   const fetchWeather = async () => {
     if (!city) {
@@ -13,7 +14,8 @@ const Weather = () => {
     }
 
     try {
-      const response = await axios.get(`${process.env.REACT_APP_WEATHER_API_URL}/${city}/`);
+      // Make API call to the correct weather API URL
+      const response = await axios.get(`${weatherApiUrl}${city}/`);
       setWeather(response.data);
       setError('');
     } catch (err) {
@@ -25,9 +27,16 @@ const Weather = () => {
   return (
     <div className="weather-container">
       <h2>Weather Information</h2>
-      <input type="text" placeholder="Enter city name..." value={city} onChange={(e) => setCity(e.target.value)} />
+      <input
+        type="text"
+        placeholder="Enter city name..."
+        value={city}
+        onChange={(e) => setCity(e.target.value)}
+      />
       <button onClick={fetchWeather}>Get Weather</button>
+
       {error && <p className="error">{error}</p>}
+
       {weather && (
         <div className="weather-info">
           <h3>{weather.city}</h3>
@@ -41,3 +50,4 @@ const Weather = () => {
 };
 
 export default Weather;
+
